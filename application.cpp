@@ -1,20 +1,15 @@
-/*---------------------------------------------------------------------
-@brief Project 1: DNA Profiling
-@author Uvaish Bakaliya
-@date Sep 15 2022
+/**
+ *@file application.cpp
+ *@author Uvaish Bakaliya
+ *@date Sep 15 2022
 
-@brief Program Components:
+ *@brief Program Components:
     load_db
     load_dna
     display
     process
     search
     load_multi_dnas (own component)
-
-
-Creative component:
-
-    Name of the component: 'load_multi_dnas'
 
     Instructions:
         Entering the beginning and ending numbers in the range of those reads
@@ -28,11 +23,11 @@ Creative component:
         so that it can read the various DNA data in the range of the those
         files ('small.txt' or 'large.txt').
 
-----------------------------------------------------------------------*/
+ */
 
-#include "ourvector.h" // for the use of ourvector from the hader file (ourvector.h)
-#include <fstream>     // We will need the libary to read from the file
-#include <sstream>     // for stringstream()
+#include "ourvector.h" 
+#include <fstream>     
+#include <sstream>    
 
 using namespace std;
 
@@ -97,15 +92,13 @@ void loadDb(DnaProfileApp &dbFileData, string fileName)
         getline(ss, line, '\n'); // read up the new line
         dbFileData.dbData.push_back(line);
     }
-
     readFile.close();
 }
 
 // Load the DANs file that push that data into dna vac
 void loadDna(DnaProfileApp &dnaFileData, string fileName)
 {
-    string line; // read into line
-
+    string line; 
     ifstream readFile(fileName);
 
     // check if the file it valid to open
@@ -119,9 +112,7 @@ void loadDna(DnaProfileApp &dnaFileData, string fileName)
     {
         // split the line and push the data into DNA vac as a char
         for (unsigned i = 0; i < line.length(); i++)
-        {
             dnaFileData.dnaData.push_back(line[i]);
-        }
     }
 }
 
@@ -132,9 +123,7 @@ void findLongCons(DnaProfileApp &longCons, int start)
     // the going to be search in DNAs data
     // found will be incremented when the all the char matches with in the DANs data file
     // max will be the longes consecutive that will be push into 'process' vac
-    int idx = 0, found = 0, max = 0;
-
-    int tmpStart = 0; // tmpStart will have the last index of the char founded in the DNA data
+    int idx = 0, found = 0, max = 0, tmpStart = 0 ;
 
     for (int finLCon = 0; finLCon < longCons.dnaData.size(); finLCon++)
     {
@@ -144,17 +133,13 @@ void findLongCons(DnaProfileApp &longCons, int start)
         {
             // if idx is 0, meaning that the value is either reset it in between or the start of the search
             if (idx == 0)
-            {
                 tmpStart = finLCon;
-            }
             idx++; // if char matches with str char
         }
         else
         {
             if (idx != 0)
-            {
                 finLCon = tmpStart;
-            }
             // reset the value of the idx, and found. start idx from 0 so
             // that we start searching for the fist char into the DNA data reset the found
             idx = 0;
@@ -186,15 +171,11 @@ void process(DnaProfileApp &process)
 
     // check before counting the longes consecutive
     if (process.dbData.size() == 0)
-    {
         cout << "No database loaded.\n"
              << endl;
-    }
     else if (process.dnaData.size() == 0)
-    {
         cout << "No DNA loaded.\n"
              << endl;
-    }
 
     // depending of the STRs ourvactor size it will call the
     // findLongCons() that many times and start at the first
@@ -202,11 +183,8 @@ void process(DnaProfileApp &process)
     else
     {
         cout << "Processing DNA...\n";
-
         for (int i = 0; i < process.str.size(); i++)
-        {
             findLongCons(process, i);
-        }
     }
 }
 
@@ -236,9 +214,8 @@ void searchInDbForPerson(DnaProfileApp &searchInDb)
         // check the the string we founded using the process function if
         // that string match with the current string of the DB data
         if (currDbDataNumSeq == stringToBeSearch)
-        {
             searchInDb.foundIdx.push_back(j);
-        }
+
     }
 }
 
@@ -251,11 +228,9 @@ void search(DnaProfileApp searchInDb)
     if (searchInDb.dbData.size() == 0)
         cout << "No database loaded.\n"
              << endl;
-
     else if (searchInDb.dnaData.size() == 0)
         cout << "No DNA loaded.\n"
              << endl;
-
     else if (searchInDb.process.size() == 0)
         cout << "No DNA processed.\n"
              << endl;
@@ -265,13 +240,11 @@ void search(DnaProfileApp searchInDb)
         cout << "Searching database...\n";
         // seach it if valid
         searchInDbForPerson(searchInDb);
-
         // if not found then
         if (searchInDb.foundIdx.size() == 0)
-        {
             cout << "Not found in database.\n"
                  << endl;
-        }
+       
         // if found then print it out
         // if there are many matches then print out those names as well
         else
@@ -290,7 +263,6 @@ void search(DnaProfileApp searchInDb)
 void displayDB(DnaProfileApp &display)
 {
     cout << "Database loaded: " << endl;
-
     // print the data
     for (auto i = 0; i < display.dbData.size(); i++)
     {
@@ -301,7 +273,6 @@ void displayDB(DnaProfileApp &display)
             else
                 cout << " ";
         }
-
         cout << endl;
     }
 }
@@ -315,9 +286,7 @@ void displayLongesCon(DnaProfileApp &display)
     for (int i = 0; i < display.str.size(); i++)
     {
         for (int j = 0; j < display.str[i].size(); j++)
-        {
             cout << display.str[i][j];
-        }
         cout << ": " << display.process[i] << endl;
     }
     cout << endl;
@@ -350,29 +319,20 @@ void loadMultiDANs(DnaProfileApp &multiDans, string fileName)
     {
         // get the start file input and stopFile so we can read the
         // files in the range of those files
-
         cout << "Enter a Start File Number (i.e '1'): ";
         cin >> startFile;
-
         cout << "Enter a Stop File (i.e '5'): ";
         cin >> stopFile;
-
+        
         // if small.txt then check the range of the file
         if (fileName == "small.txt" && (startFile >= 1 && stopFile <= 5))
-        {
             addMultiFiles(multiDans, startFile, stopFile);
-        }
-
         // if large.txt then check the range of the file
         else if (fileName == "large.txt" && (startFile >= 6 && stopFile <= 20))
-        {
             addMultiFiles(multiDans, startFile, stopFile);
-        }
         // if not out of range
         else
-        {
             cout << "Out of Range." << endl;
-        }
     }
 }
 
@@ -384,7 +344,6 @@ void display(DnaProfileApp &display)
     if (display.dbData.size() == 0)
         cout << "No database loaded." << endl;
     else // go into function and print it
-
         displayDB(display);
     if (display.dnaData.size() == 0)
         cout << "\nNo DNA loaded.\n"
