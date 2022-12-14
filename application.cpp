@@ -405,6 +405,7 @@ void display(DnaProfileApp &display)
 // runs all the commands here
 int main()
 {
+    system("clear");
     cout << "Welcome to the DNA Profiling Application.\n";
     // get the command input and file input
     string commandEntry, fileEntryForDb = " ", fileEntryForDna;
